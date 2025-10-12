@@ -3,7 +3,9 @@ const cors = require('cors');
 require('dotenv').config();
 
 const userRoutes = require('./routes/userRoutes');
-const userRoutes = require('./routes/userRoutes');
+const locationRoutes = require('./routes/locationRoutes');
+const teamRoutes = require('./routes/teamRoutes');
+const contestRoutes = require('./routes/contestRoutes');
 
 const app = express();
 
@@ -14,6 +16,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api', userRoutes);
+app.use('/api', locationRoutes);
+app.use('/api', teamRoutes);
+app.use('/api', contestRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
