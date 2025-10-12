@@ -18,6 +18,7 @@ afterAll(async () => {
 describe('User API', () => {
   let adminToken;
   let userToken;
+  let newUserId;
 
   describe('POST /api/signup', () => {
     it('should create a new user', async () => {
@@ -26,14 +27,18 @@ describe('User API', () => {
         .send({
           username: 'testuser',
           email: 'testuser@example.com',
-          password: 'test123'
+          password: 'test123',
+          affiliation: 'Test University'
         });
-      console.log(response);
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('user');
       expect(response.body.user.username).toBe('testuser');
+      expect(response.body.user.affiliation).toBe('Test University');
+      expect(response.body.user.status).toBe('new');
+      expect(response.body.user.role).toBe('judge');
       expect(response.body.user).not.toHaveProperty('password');
+      newUserId = response.body.user.id;
     });
 
     it('should return 400 if required fields are missing', async () => {
@@ -53,7 +58,8 @@ describe('User API', () => {
         .send({
           username: 'testuser',
           email: 'another@example.com',
-          password: 'test123'
+          password: 'test123',
+          affiliation: 'Some Other University'
         });
 
       expect(response.status).toBe(409);
@@ -66,13 +72,13 @@ describe('User API', () => {
         .post('/api/login')
         .send({
           username: 'admin',
-          password: 'admin123'
+          password: 'password'
         });
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('token');
       expect(response.body.user.username).toBe('admin');
-      expect(response.body.user.role).toBe("asmin");
+      expect(response.body.user.role).toBe('admin');
       
       adminToken = response.body.token;
     });
@@ -81,13 +87,13 @@ describe('User API', () => {
       const response = await request(app)
         .post('/api/login')
         .send({
-          username: 'john',
-          password: 'user123'
+          username: 'judge1',
+          password: 'password'
         });
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('token');
-      expect(response.body.user.username).toBe('john');
+      expect(response.body.user.username).toBe('judge1');
       
       userToken = response.body.token;
     });
@@ -111,6 +117,61 @@ describe('User API', () => {
         });
 
       expect(response.status).toBe(400);
+    });
+  });
+
+  describe('GET /api/users/:id', () => {
+    it('should return a single user for admin', async () => {
+      const response = await request(app)
+        .get(`/api/users/${newUserId}`)
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('user');
+      expect(response.body.user.id).toBe(newUserId);
+      expect(response.body.user).not.toHaveProperty('password');
+    });
+
+    it('should return 403 for non-admin users', async () => {
+      const response = await request(app)
+        .get(`/api/users/${newUserId}`)
+        .set('Authorization', `Bearer ${userToken}`);
+
+      expect(response.status).toBe(403);
+    });
+
+    it('should return 404 for non-existent user', async () => {
+      const response = await request(app)
+        .get('/api/users/9999')
+        .set('Authorization', `Bearer ${adminToken}`);
+
+      expect(response.status).toBe(404);
+    });
+  });
+
+  describe('PUT /api/users/:id', () => {
+    it('should update a user for admin', async () => {
+      const response = await request(app)
+        .put(`/api/users/${newUserId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          status: 'active',
+          role: 'judge'
+        });
+
+      expect(response.status).toBe(200);
+      expect(response.body.user.status).toBe('active');
+    });
+
+    it('should return 403 for non-admin users', async () => {
+      const response = await request(app)
+        .put(`/api/users/${newUserId}`)
+        .set('Authorization', `Bearer ${userToken}`)
+        .send({
+          status: 'active'
+        });
+
+      expect(response.status).toBe(403);
     });
   });
 

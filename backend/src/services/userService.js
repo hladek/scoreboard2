@@ -4,17 +4,36 @@ const db = require('../config/database');
 const { JWT_SECRET } = require('../middleware/auth');
 
 class UserService {
-  async createUser(username, email, password, role = "judge") {
+  async createUser(username, email, password, affiliation) {
     const hashedPassword = await bcrypt.hash(password, 10);
     
     const [userId] = await db('users').insert({
       username,
       email,
       password: hashedPassword,
-      role: role
+      affiliation,
+      status: 'new',
+      role: 'judge'
     });
 
     const user = await db('users').where({ id: userId }).first();
+    return this.sanitizeUser(user);
+  }
+
+  async updateUser(id, userDetails) {
+    const { password, ...rest } = userDetails;
+    if (password) {
+      rest.password = await bcrypt.hash(password, 10);
+    }
+    await db('users').where({ id }).update(rest);
+    return this.getUserById(id);
+  }
+
+  async getUserById(id) {
+    const user = await db('users').where({ id }).first();
+    if (!user) {
+      return null;
+    }
     return this.sanitizeUser(user);
   }
 

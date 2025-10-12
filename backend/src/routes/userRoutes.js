@@ -12,5 +12,7 @@ router.post('/logout', authMiddleware, userController.logout);
 
 // Admin-only routes
 router.get('/users', authMiddleware, adminMiddleware, userController.listUsers);
+router.get('/users/:id', authMiddleware, adminMiddleware, userController.getUser);
+router.put('/users/:id', authMiddleware, adminMiddleware, userController.updateUser);
 
 module.exports = router;
