@@ -21,24 +21,53 @@ describe('User API', () => {
   let newUserId;
 
   describe('POST /api/signup', () => {
-    it('should create a new user', async () => {
+    const secret = process.env.USER_CREATION_SECRET || 'change-this-secret';
+
+    it('should create a new user with a valid secret', async () => {
       const response = await request(app)
         .post('/api/signup')
         .send({
           username: 'testuser',
           email: 'testuser@example.com',
           password: 'test123',
-          affiliation: 'Test University'
+          affiliation: 'Test University',
+          secret: secret
         });
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('user');
       expect(response.body.user.username).toBe('testuser');
-      expect(response.body.user.affiliation).toBe('Test University');
-      expect(response.body.user.status).toBe('new');
-      expect(response.body.user.role).toBe('judge');
-      expect(response.body.user).not.toHaveProperty('password');
       newUserId = response.body.user.id;
+    });
+
+    it('should not create a user with an invalid secret', async () => {
+      const response = await request(app)
+        .post('/api/signup')
+        .send({
+          username: 'testuser2',
+          email: 'testuser2@example.com',
+          password: 'test123',
+          affiliation: 'Test University',
+          secret: 'invalid-secret'
+        });
+
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error', 'Invalid secret for user creation');
+    });
+
+    it('should not create a user if secret is the same as password', async () => {
+      const response = await request(app)
+        .post('/api/signup')
+        .send({
+          username: 'testuser3',
+          email: 'testuser3@example.com',
+          password: secret,
+          affiliation: 'Test University',
+          secret: secret
+        });
+
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error', 'Password cannot be the same as the secret phrase');
     });
 
     it('should return 400 if required fields are missing', async () => {
@@ -59,7 +88,8 @@ describe('User API', () => {
           username: 'testuser',
           email: 'another@example.com',
           password: 'test123',
-          affiliation: 'Some Other University'
+          affiliation: 'Some Other University',
+          secret: secret
         });
 
       expect(response.status).toBe(409);

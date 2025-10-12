@@ -2,9 +2,16 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/database');
 const { JWT_SECRET } = require('../middleware/auth');
+const USER_CREATION_SECRET = process.env.USER_CREATION_SECRET || 'change-this-secret';
 
 class UserService {
-  async createUser(username, email, password, affiliation) {
+  async createUser(username, email, password, affiliation, secret) {
+    if (secret !== USER_CREATION_SECRET) {
+      throw new Error('Invalid secret for user creation');
+    }
+    if (password === secret) {
+      throw new Error('Password cannot be the same as the secret phrase');
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     
     const [userId] = await db('users').insert({

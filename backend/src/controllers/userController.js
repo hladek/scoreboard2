@@ -3,13 +3,13 @@ const userService = require('../services/userService');
 class UserController {
   async signup(req, res) {
     try {
-      const { username, email, password, affiliation } = req.body;
+      const { username, email, password, affiliation, secret } = req.body;
 
-      if (!username || !email || !password || !affiliation) {
-        return res.status(400).json({ error: 'Username, email, password, and affiliation are required' });
+      if (!username || !email || !password || !affiliation || !secret) {
+        return res.status(400).json({ error: 'Username, email, password, affiliation, and secret are required' });
       }
 
-      const user = await userService.createUser(username, email, password, affiliation);
+      const user = await userService.createUser(username, email, password, affiliation, secret);
       res.status(201).json({ message: 'User created successfully', user });
     } catch (error) {
       if (error.code === 'SQLITE_CONSTRAINT') {
