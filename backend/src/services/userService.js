@@ -4,14 +4,14 @@ const db = require('../config/database');
 const { JWT_SECRET } = require('../middleware/auth');
 
 class UserService {
-  async createUser(username, email, password, isAdmin = false) {
+  async createUser(username, email, password, role = "judge") {
     const hashedPassword = await bcrypt.hash(password, 10);
     
     const [userId] = await db('users').insert({
       username,
       email,
       password: hashedPassword,
-      is_admin: isAdmin
+      role: role
     });
 
     const user = await db('users').where({ id: userId }).first();
@@ -32,7 +32,7 @@ class UserService {
     }
 
     const token = jwt.sign(
-      { userId: user.id, username: user.username, isAdmin: user.is_admin },
+      { userId: user.id, username: user.username, role: user.role },
       JWT_SECRET,
       { expiresIn: '24h' }
     );

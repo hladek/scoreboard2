@@ -28,6 +28,7 @@ describe('User API', () => {
           email: 'testuser@example.com',
           password: 'test123'
         });
+      console.log(response);
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('user');
@@ -71,7 +72,7 @@ describe('User API', () => {
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('token');
       expect(response.body.user.username).toBe('admin');
-      expect(response.body.user.is_admin).toBeTruthy();
+      expect(response.body.user.role).toBe("asmin");
       
       adminToken = response.body.token;
     });
