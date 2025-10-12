@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scoreboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Scoreboard</h1>
+        
+        <div id="welcome-prompt" class="prompt-box">
+            <h2>Welcome to Scoreboard 2.0!</h2>
+            <p>Track scores for your games and competitions.</p>
+            <button id="start-btn">Start New Game</button>
+        </div>
+
+        <div id="scoreboard" class="hidden">
+            <div class="setup-section">
+                <h2>Game Setup</h2>
+                <div class="form-group">
+                    <label for="team1-name">Team 1 Name:</label>
+                    <input type="text" id="team1-name" placeholder="Enter team 1 name" value="Team 1">
+                </div>
+                <div class="form-group">
+                    <label for="team2-name">Team 2 Name:</label>
+                    <input type="text" id="team2-name" placeholder="Enter team 2 name" value="Team 2">
+                </div>
+                <button id="setup-btn">Setup Complete</button>
+            </div>
+
+            <div id="score-section" class="hidden">
+                <div class="scores">
+                    <div class="team-score">
+                        <h2 id="team1-display">Team 1</h2>
+                        <div class="score" id="score1">0</div>
+                        <div class="controls">
+                            <button class="btn-plus" onclick="updateScore(1, 1)">+1</button>
+                            <button class="btn-minus" onclick="updateScore(1, -1)">-1</button>
+                        </div>
+                    </div>
+
+                    <div class="divider">VS</div>
+
+                    <div class="team-score">
+                        <h2 id="team2-display">Team 2</h2>
+                        <div class="score" id="score2">0</div>
+                        <div class="controls">
+                            <button class="btn-plus" onclick="updateScore(2, 1)">+1</button>
+                            <button class="btn-minus" onclick="updateScore(2, -1)">-1</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button id="reset-btn" class="btn-reset">Reset Scores</button>
+                    <button id="new-game-btn" class="btn-new">New Game</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
