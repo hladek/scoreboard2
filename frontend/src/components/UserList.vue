@@ -78,7 +78,12 @@ export default {
         const response = await api.getUsers();
         this.users = response.data.users;
       } catch (error) {
-        this.error = error.response?.data?.error || 'Failed to load users.';
+        // If not authenticated or not admin, show a message instead of error
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          this.error = 'Please login as an admin to view the user list.';
+        } else {
+          this.error = error.response?.data?.error || 'Failed to load users.';
+        }
       } finally {
         this.loading = false;
       }
