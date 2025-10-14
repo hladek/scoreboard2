@@ -17,14 +17,14 @@
         <thead>
           <tr>
             <th>Name</th>
-            <th>Date</th>
             <th v-if="canEdit">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="location in locations" :key="location.id" :data-testid="`location-row-${location.id}`">
-            <td>{{ location.name }}</td>
-            <td>{{ location.date }}</td>
+            <td>
+              <router-link :to="`/location/${location.id}`">{{ location.name }}</router-link>
+            </td>
             <td v-if="canEdit">
               <button
                 class="btn btn-sm btn-primary"

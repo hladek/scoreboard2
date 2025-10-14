@@ -3,6 +3,7 @@ import Home from '../views/Home.vue';
 import LoginView from '../views/LoginView.vue';
 import SignupView from '../views/SignupView.vue';
 import AdminView from '../views/AdminView.vue';
+import LocationView from '../views/LocationView.vue';
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     name: 'Admin',
     component: AdminView,
     meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  {
+    path: '/location/:id',
+    name: 'Location',
+    component: LocationView
   }
 ];
 

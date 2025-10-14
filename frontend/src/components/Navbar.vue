@@ -21,9 +21,6 @@
           <li v-if="!isLoggedIn" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
           </li>
-          <li v-if="!isLoggedIn" class="nav-item">
-            <router-link class="nav-link" to="/signup">Signup</router-link>
-          </li>
           <li v-if="isAdmin" class="nav-item">
             <router-link class="nav-link" to="/admin">Admin</router-link>
           </li>

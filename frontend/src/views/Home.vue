@@ -3,10 +3,6 @@
     <div class="jumbotron bg-light p-5 rounded-3 mb-4">
       <h1 class="display-4">Welcome to Scoreboard2</h1>
       <p class="lead">A modern user management system with authentication and authorization.</p>
-      <hr class="my-4">
-      <p v-if="!isLoggedIn">Please login to view the user list and access admin features.</p>
-      <p v-else-if="isAdmin">You have admin access. View and manage users below.</p>
-      <p v-else>You are logged in. View the user list below.</p>
     </div>
     <LocationList />
     <UserList v-if="isLoggedIn && isAdmin" />
