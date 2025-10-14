@@ -37,7 +37,16 @@
         </div>
 
         <div class="col-md-6 mb-4">
-          <h2>Contests</h2>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Contests</h2>
+            <router-link 
+              v-if="isAuthenticated"
+              :to="`/location/${$route.params.id}/contests`" 
+              class="btn btn-sm btn-primary"
+            >
+              Manage Contests
+            </router-link>
+          </div>
           <div v-if="contestsLoading" class="text-center">
             <div class="spinner-border spinner-border-sm" role="status">
               <span class="visually-hidden">Loading...</span>

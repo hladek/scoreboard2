@@ -5,6 +5,7 @@ import SignupView from '../views/SignupView.vue';
 import AdminView from '../views/AdminView.vue';
 import LocationView from '../views/LocationView.vue';
 import TeamManagementView from '../views/TeamManagementView.vue';
+import ContestManagementView from '../views/ContestManagementView.vue';
 
 const routes = [
   {
@@ -37,6 +38,12 @@ const routes = [
     path: '/location/:id/teams',
     name: 'TeamManagement',
     component: TeamManagementView,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/location/:id/contests',
+    name: 'ContestManagement',
+    component: ContestManagementView,
     meta: { requiresAuth: true }
   }
 ];

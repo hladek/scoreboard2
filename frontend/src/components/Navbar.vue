@@ -21,8 +21,11 @@
           <li v-if="currentLocation" class="nav-item">
             <router-link class="nav-link" :to="`/location/${currentLocation.id}`">{{ currentLocation.name }}</router-link>
           </li>
-          <li v-if="currentLocation" class="nav-item">
+          <li v-if="currentLocation && isLoggedIn" class="nav-item">
             <router-link class="nav-link" :to="`/location/${currentLocation.id}/teams`"> Teams</router-link>
+          </li>
+          <li v-if="currentLocation && isLoggedIn" class="nav-item">
+            <router-link class="nav-link" :to="`/location/${currentLocation.id}/contests`"> Contests</router-link>
           </li>
           <li v-if="!isLoggedIn" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
