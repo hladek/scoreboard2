@@ -19,32 +19,25 @@
 <script>
 import LocationList from '../components/LocationList.vue';
 import UserList from '../components/UserList.vue';
+import { useUserStore } from '../stores/user';
+import { computed } from 'vue';
 
 export default {
   name: 'Home',
   components: {
+    LocationList,
     UserList
   },
-  data() {
+  setup() {
+    const userStore = useUserStore();
+    
+    const isLoggedIn = computed(() => userStore.isAuthenticated);
+    const isAdmin = computed(() => userStore.isAdmin);
+    
     return {
-      isLoggedIn: false,
-      isAdmin: false
+      isLoggedIn,
+      isAdmin
     };
-  },
-  created() {
-    this.checkAuth();
-    window.addEventListener('auth-change', this.checkAuth);
-  },
-  beforeUnmount() {
-    window.removeEventListener('auth-change', this.checkAuth);
-  },
-  methods: {
-    checkAuth() {
-      const token = localStorage.getItem('token');
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      this.isLoggedIn = !!token;
-      this.isAdmin = user.is_admin || false;
-    }
   }
 };
 </script>

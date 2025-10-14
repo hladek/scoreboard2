@@ -41,41 +41,33 @@
 
 <script>
 import api from '../api';
+import { useUserStore } from '../stores/user';
+import { computed } from 'vue';
 
 export default {
   name: 'Navbar',
-  data() {
+  setup() {
+    const userStore = useUserStore();
+    
+    const isLoggedIn = computed(() => userStore.isAuthenticated);
+    const isAdmin = computed(() => userStore.isAdmin);
+    const username = computed(() => userStore.username);
+    
     return {
-      isLoggedIn: false,
-      isAdmin: false,
-      username: ''
+      userStore,
+      isLoggedIn,
+      isAdmin,
+      username
     };
   },
-  created() {
-    this.checkAuth();
-    // Listen for auth changes
-    window.addEventListener('auth-change', this.checkAuth);
-  },
-  beforeUnmount() {
-    window.removeEventListener('auth-change', this.checkAuth);
-  },
   methods: {
-    checkAuth() {
-      const token = localStorage.getItem('token');
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      this.isLoggedIn = !!token;
-      this.isAdmin = user.is_admin || false;
-      this.username = user.username || '';
-    },
     async handleLogout() {
       try {
         await api.logout();
       } catch (error) {
         console.error('Logout error:', error);
       } finally {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        this.checkAuth();
+        this.userStore.logout();
         window.dispatchEvent(new Event('auth-change'));
         this.$router.push('/');
       }

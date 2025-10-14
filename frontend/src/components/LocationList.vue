@@ -16,7 +16,6 @@
       <table class="table table-striped table-hover" data-testid="location-table">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Date</th>
             <th v-if="canEdit">Actions</th>
@@ -24,7 +23,6 @@
         </thead>
         <tbody>
           <tr v-for="location in locations" :key="location.id" :data-testid="`location-row-${location.id}`">
-            <td>{{ location.id }}</td>
             <td>{{ location.name }}</td>
             <td>{{ location.date }}</td>
             <td v-if="canEdit">

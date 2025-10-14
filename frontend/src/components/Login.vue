@@ -50,6 +50,7 @@
 
 <script>
 import api from '../api';
+import { useUserStore } from '../stores/user';
 
 export default {
   name: 'Login',
@@ -61,6 +62,10 @@ export default {
       loading: false
     };
   },
+  setup() {
+    const userStore = useUserStore();
+    return { userStore };
+  },
   methods: {
     async handleSubmit() {
       this.error = '';
@@ -70,8 +75,8 @@ export default {
         const response = await api.login(this.username, this.password);
         const { token, user } = response.data;
         
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        this.userStore.setToken(token);
+        this.userStore.setUser(user);
         
         window.dispatchEvent(new Event('auth-change'));
         
