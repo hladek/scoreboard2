@@ -42,7 +42,8 @@
 </template>
 
 <script>
-import api from '../api';
+import { useLocationStore } from '../stores/location';
+import { computed, onMounted } from 'vue';
 
 export default {
   name: 'LocationList',
@@ -52,30 +53,24 @@ export default {
       default: false
     }
   },
-  data() {
+  setup() {
+    const locationStore = useLocationStore();
+    
+    const locations = computed(() => locationStore.locations);
+    const loading = computed(() => locationStore.loading);
+    const error = computed(() => locationStore.error);
+    
+    onMounted(() => {
+      locationStore.fetchLocations();
+    });
+    
     return {
-      locations: [],
-      loading: false,
-      error: ''
+      locations,
+      loading,
+      error
     };
   },
-  created() {
-    this.fetchLocations();
-  },
   methods: {
-    async fetchLocations() {
-      this.loading = true;
-      this.error = '';
-      
-      try {
-        const response = await api.getLocations();
-        this.locations = response.data.locations;
-      } catch (error) {
-        this.error = error.response?.data?.error || 'Failed to load locations.';
-      } finally {
-        this.loading = false;
-      }
-    },
     editLocation(location) {
       this.$emit('edit-location', location);
     }
