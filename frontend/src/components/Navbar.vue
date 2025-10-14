@@ -1,7 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
-      <router-link class="navbar-brand" to="/">Scoreboard2</router-link>
       <button
         class="navbar-toggler"
         type="button"
@@ -15,8 +14,15 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
+
           <li class="nav-item">
             <router-link class="nav-link" to="/">Home</router-link>
+          </li>
+          <li v-if="currentLocation" class="nav-item">
+            <router-link class="nav-link" :to="`/location/${currentLocation.id}`">{{ currentLocation.name }}</router-link>
+          </li>
+          <li v-if="currentLocation" class="nav-item">
+            <router-link class="nav-link" :to="`/location/${currentLocation.id}/teams`"> Teams</router-link>
           </li>
           <li v-if="!isLoggedIn" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
@@ -39,22 +45,26 @@
 <script>
 import api from '../api';
 import { useUserStore } from '../stores/user';
+import { useLocationStore } from '../stores/location';
 import { computed } from 'vue';
 
 export default {
   name: 'Navbar',
   setup() {
     const userStore = useUserStore();
+    const locationStore = useLocationStore();
     
     const isLoggedIn = computed(() => userStore.isAuthenticated);
     const isAdmin = computed(() => userStore.isAdmin);
     const username = computed(() => userStore.username);
+    const currentLocation = computed(() => locationStore.currentLocation);
     
     return {
       userStore,
       isLoggedIn,
       isAdmin,
-      username
+      username,
+      currentLocation
     };
   },
   methods: {

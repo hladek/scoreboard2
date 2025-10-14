@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue';
 import SignupView from '../views/SignupView.vue';
 import AdminView from '../views/AdminView.vue';
 import LocationView from '../views/LocationView.vue';
+import TeamManagementView from '../views/TeamManagementView.vue';
 
 const routes = [
   {
@@ -31,6 +32,12 @@ const routes = [
     path: '/location/:id',
     name: 'Location',
     component: LocationView
+  },
+  {
+    path: '/location/:id/teams',
+    name: 'TeamManagement',
+    component: TeamManagementView,
+    meta: { requiresAuth: true }
   }
 ];
 

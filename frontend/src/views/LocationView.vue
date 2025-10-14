@@ -17,7 +17,9 @@
 
       <div class="row">
         <div class="col-md-6 mb-4">
-          <h2>Teams</h2>
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Teams</h2>
+          </div>
           <div v-if="teamsLoading" class="text-center">
             <div class="spinner-border spinner-border-sm" role="status">
               <span class="visually-hidden">Loading...</span>
@@ -59,18 +61,21 @@
 
 <script>
 import { useLocationStore } from '../stores/location';
+import { useUserStore } from '../stores/user';
 import { computed, onMounted, onUnmounted } from 'vue';
 
 export default {
   name: 'LocationView',
   setup() {
     const locationStore = useLocationStore();
+    const userStore = useUserStore();
     
     const location = computed(() => locationStore.currentLocation);
     const teams = computed(() => locationStore.currentLocationTeams);
     const contests = computed(() => locationStore.currentLocationContests);
     const loading = computed(() => locationStore.loading);
     const error = computed(() => locationStore.error);
+    const isAuthenticated = computed(() => userStore.isAuthenticated);
     
     return {
       location,
@@ -78,6 +83,7 @@ export default {
       contests,
       loading,
       error,
+      isAuthenticated,
       locationStore
     };
   },
