@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useUserStore = defineStore('user', {
   state: () => ({
-    currentUser: null,
+    currentUser: JSON.parse(localStorage.getItem('user')) || null,
     token: localStorage.getItem('token') || null,
     isAuthenticated: !!localStorage.getItem('token')
   }),
@@ -17,6 +17,11 @@ export const useUserStore = defineStore('user', {
     setUser(user) {
       this.currentUser = user;
       this.isAuthenticated = !!user;
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        localStorage.removeItem('user');
+      }
     },
 
     setToken(token) {
@@ -34,6 +39,7 @@ export const useUserStore = defineStore('user', {
       this.token = null;
       this.isAuthenticated = false;
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     }
   }
 });

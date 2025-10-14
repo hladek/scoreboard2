@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { useUserStore } from '../stores/user';
 import Home from '../views/Home.vue';
 import LoginView from '../views/LoginView.vue';
 import SignupView from '../views/SignupView.vue';
@@ -55,12 +56,11 @@ const router = createRouter({
 
 // Navigation guard for protected routes
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token');
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userStore = useUserStore();
   
-  if (to.meta.requiresAuth && !token) {
+  if (to.meta.requiresAuth && !userStore.isAuthenticated) {
     next('/login');
-  } else if (to.meta.requiresAdmin && !user.is_admin) {
+  } else if (to.meta.requiresAdmin && !userStore.isAdmin) {
     next('/');
   } else {
     next();

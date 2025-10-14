@@ -80,11 +80,7 @@ export default {
         
         window.dispatchEvent(new Event('auth-change'));
         
-        if (user.is_admin) {
-          this.$router.push('/admin');
-        } else {
-          this.$router.push('/');
-        }
+        this.$router.push('/');
       } catch (error) {
         this.error = error.response?.data?.error || 'Login failed. Please try again.';
       } finally {
