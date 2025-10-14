@@ -48,6 +48,26 @@ class LocationController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  async listContestsByLocation(req, res) {
+    try {
+      const { id } = req.params;
+      const contests = await locationService.getContestsByLocationId(id);
+      res.json({ contests });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async listTeamsByLocation(req, res) {
+    try {
+      const { id } = req.params;
+      const teams = await locationService.getTeamsByLocationId(id);
+      res.json({ teams });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
 
 module.exports = new LocationController();

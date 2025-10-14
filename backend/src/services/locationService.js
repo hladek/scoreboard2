@@ -22,6 +22,14 @@ class LocationService {
   async getAllLocations() {
     return db('locations').select('*');
   }
+
+  async getContestsByLocationId(locationId) {
+    return db('contests').where({ location_id: locationId }).select('*');
+  }
+
+  async getTeamsByLocationId(locationId) {
+    return db('teams').where({ location_id: locationId }).select('*');
+  }
 }
 
 module.exports = new LocationService();
