@@ -8,6 +8,7 @@
       <p v-else-if="isAdmin">You have admin access. View and manage users below.</p>
       <p v-else>You are logged in. View the user list below.</p>
     </div>
+    <LocationList />
     <UserList v-if="isLoggedIn && isAdmin" />
     <div v-else class="alert alert-info">
       <p class="mb-0">The user list is available to administrators. Please <router-link to="/login">login</router-link> with admin credentials to view all users.</p>
@@ -16,6 +17,7 @@
 </template>
 
 <script>
+import LocationList from '../components/LocationList.vue';
 import UserList from '../components/UserList.vue';
 
 export default {
