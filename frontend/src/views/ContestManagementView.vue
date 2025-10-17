@@ -53,6 +53,12 @@
               <td>{{ contest.description || '-' }}</td>
               <td>{{ contest.max_rounds || '-' }}</td>
               <td v-if="isAuthenticated">
+                <router-link
+                  :to="`/contest/${contest.id}/rounds`"
+                  class="btn btn-sm btn-success me-2"
+                >
+                  Rounds
+                </router-link>
                 <button
                   class="btn btn-sm btn-primary me-2"
                   @click="openEditModal(contest)"

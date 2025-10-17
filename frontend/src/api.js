@@ -94,5 +94,19 @@ export default {
 
   updateContest(id, name) {
     return apiClient.put(`/api/contests/${id}`, { name });
+  },
+
+  // Round endpoints
+  createRound(round_number, contest_id, team_id, time, points, status, judge_notes) {
+    return apiClient.post('/api/rounds', { round_number, contest_id, team_id, time, points, status, judge_notes });
+  },
+
+  getRounds(contest_id) {
+    const params = contest_id ? { contest_id } : {};
+    return apiClient.get('/api/rounds', { params });
+  },
+
+  updateRound(id, updates) {
+    return apiClient.put(`/api/rounds/${id}`, updates);
   }
 };
