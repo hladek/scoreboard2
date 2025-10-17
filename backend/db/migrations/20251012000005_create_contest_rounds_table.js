@@ -1,6 +1,6 @@
 
 exports.up = function(knex) {
-  return knex.schema.createTable('contest_rounds', function(table) {
+  return knex.schema.createTable('rounds', function(table) {
     table.increments('id').primary();
     table.float('time');
     table.float('points');
@@ -12,5 +12,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable('contest_rounds');
+  return knex.schema.dropTable('rounds');
 };

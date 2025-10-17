@@ -6,6 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 const locationRoutes = require('./routes/locationRoutes');
 const teamRoutes = require('./routes/teamRoutes');
 const contestRoutes = require('./routes/contestRoutes');
+const roundRoutes = require('./routes/roundRoutes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/api', userRoutes);
 app.use('/api', locationRoutes);
 app.use('/api', teamRoutes);
 app.use('/api', contestRoutes);
+app.use('/api', roundRoutes);
 
 // Health check
 app.get('/health', (req, res) => {
