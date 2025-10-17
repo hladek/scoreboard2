@@ -67,6 +67,7 @@ describe('Round API', () => {
         team_id: teamId,
         time: 120,
         points: 50,
+	status: 'new',
         judge_notes: 'Good performance',
       });
 
@@ -85,6 +86,7 @@ describe('Round API', () => {
       .set('Authorization', `Bearer ${adminToken}`)
       .send({
         round_number: 2,
+	status: 'new',
         contest_id: contestId,
         team_id: teamId,
       });
@@ -101,6 +103,7 @@ describe('Round API', () => {
       .send({
         contest_id: contestId,
         team_id: teamId,
+        status: 'new',
       });
 
     expect(response.status).toBe(400);
@@ -114,6 +117,7 @@ describe('Round API', () => {
       .send({
         round_number: 3,
         team_id: teamId,
+        status: 'new',
       });
 
     expect(response.status).toBe(400);
@@ -127,6 +131,7 @@ describe('Round API', () => {
       .send({
         round_number: 3,
         contest_id: contestId,
+        status: 'new',
       });
 
     expect(response.status).toBe(400);
@@ -138,6 +143,7 @@ describe('Round API', () => {
       .post('/api/rounds')
       .send({
         round_number: 1,
+	status: 'new',
         contest_id: contestId,
         team_id: teamId,
       });
@@ -153,6 +159,7 @@ describe('Round API', () => {
         round_number: 3,
         contest_id: contestId,
         team_id: teamId,
+	status: 'new',
         time: 90,
         points: 40,
       });
@@ -196,6 +203,7 @@ describe('Round API', () => {
       .set('Authorization', `Bearer ${adminToken}`)
       .send({
         time: 150,
+	status: 'new',
         points: 60,
         judge_notes: 'Updated notes',
       });

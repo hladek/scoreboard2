@@ -22,6 +22,13 @@ class RoundService {
   async getRoundsByContestId(contest_id) {
     return db('rounds').where({ contest_id });
   }
+
+  async getRoundsByContestSortedByPoints(contest_id) {
+    return db('rounds')
+      .where({ contest_id })
+      .orderBy('points', 'desc')
+      .select('*');
+  }
 }
 
 module.exports = new RoundService();

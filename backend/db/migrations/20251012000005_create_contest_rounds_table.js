@@ -6,6 +6,7 @@ exports.up = function(knex) {
     table.float('points');
     table.string('judge_notes');
     table.integer('round_number').notNullable();
+    table.enum('status', ['new', 'current', 'passed', 'deleted']).notNullable();
     table.integer('contest_id').unsigned().references('id').inTable('contests');
     table.integer('team_id').unsigned().references('id').inTable('teams');
   });

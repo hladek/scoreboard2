@@ -3,13 +3,13 @@ const roundService = require('../services/roundService');
 class RoundController {
   async createRound(req, res) {
     try {
-      const { time, points, judge_notes, round_number, contest_id, team_id } = req.body;
+      const { time, points, judge_notes, round_number, status, contest_id, team_id } = req.body;
 
-      if (!round_number || !contest_id || !team_id) {
-        return res.status(400).json({ error: 'round_number, contest_id, and team_id are required' });
+      if (!round_number || !contest_id || !team_id || !status) {
+        return res.status(400).json({ error: 'round_number, contest_id, team_id and status are required' });
       }
 
-      const round = await roundService.createRound({ time, points, judge_notes, round_number, contest_id, team_id });
+      const round = await roundService.createRound({ time, points, judge_notes, round_number, status, contest_id, team_id });
       res.status(201).json({ message: 'Round created successfully', round });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -36,6 +36,21 @@ class RoundController {
       } else {
         rounds = await roundService.getAllRounds();
       }
+      res.json({ rounds });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
+
+  async getContestLeaderboard(req, res) {
+    try {
+      const { contest_id } = req.params;
+      
+      if (!contest_id) {
+        return res.status(400).json({ error: 'contest_id is required' });
+      }
+
+      const rounds = await roundService.getRoundsByContestSortedByPoints(contest_id);
       res.json({ rounds });
     } catch (error) {
       res.status(500).json({ error: error.message });
