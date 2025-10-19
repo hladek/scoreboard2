@@ -16,22 +16,22 @@
         <ul class="navbar-nav ms-auto">
 
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Home</router-link>
+            <router-link class="nav-link" to="/" active-class="active">Home</router-link>
           </li>
           <li v-if="currentLocation" class="nav-item">
-            <router-link class="nav-link" :to="`/location/${currentLocation.id}`">{{ currentLocation.name }}</router-link>
+            <router-link class="nav-link" :to="`/location/${currentLocation.id}`" active-class="active">{{ currentLocation.name }}</router-link>
           </li>
           <li v-if="currentLocation && isLoggedIn" class="nav-item">
-            <router-link class="nav-link" :to="`/location/${currentLocation.id}/teams`"> Teams</router-link>
+            <router-link class="nav-link" :to="`/location/${currentLocation.id}/teams`" active-class="active"> Teams</router-link>
           </li>
           <li v-if="currentLocation && isLoggedIn" class="nav-item">
-            <router-link class="nav-link" :to="`/location/${currentLocation.id}/contests`"> Contests</router-link>
+            <router-link class="nav-link" :to="`/location/${currentLocation.id}/contests`" active-class="active"> Contests</router-link>
           </li>
           <li v-if="!isLoggedIn" class="nav-item">
-            <router-link class="nav-link" to="/login">Login</router-link>
+            <router-link class="nav-link" to="/login" active-class="active">Login</router-link>
           </li>
           <li v-if="isAdmin" class="nav-item">
-            <router-link class="nav-link" to="/admin">Admin</router-link>
+            <router-link class="nav-link" to="/admin" active-class="active">Admin</router-link>
           </li>
           <li v-if="isLoggedIn" class="nav-item">
             <span class="nav-link">{{ username }}</span>
@@ -85,3 +85,14 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.navbar {
+  padding: 1rem 0;
+}
+
+.nav-link {
+  font-size: 1.125rem;
+  padding: 0.75rem 1rem !important;
+}
+</style>
