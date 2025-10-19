@@ -15,9 +15,6 @@
           <p v-if="contest.description" class="text-muted">{{ contest.description }}</p>
           <p v-if="contest.max_rounds" class="text-muted">Max Rounds: {{ contest.max_rounds }}</p>
         </div>
-        <router-link :to="`/location/${contest.location_id}/contests`" class="btn btn-secondary">
-          Back to Contests
-        </router-link>
       </div>
 
       <div class="mb-4">

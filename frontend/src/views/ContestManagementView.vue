@@ -14,9 +14,6 @@
           <h1>Contests - {{ location.name }}</h1>
           <p v-if="location.date" class="text-muted">{{ formatDate(location.date) }}</p>
         </div>
-        <router-link :to="`/location/${$route.params.id}`" class="btn btn-secondary">
-          Back to Location
-        </router-link>
       </div>
 
       <div class="mb-4">
