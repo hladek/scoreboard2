@@ -5,6 +5,7 @@ export const useLocationStore = defineStore('location', {
   state: () => ({
     locations: [],
     currentLocation: null,
+    currentContest: null,
     currentLocationTeams: [],
     currentLocationContests: [],
     loading: false,
@@ -80,12 +81,36 @@ export const useLocationStore = defineStore('location', {
       ]);
     },
 
+    async fetchContestById(contestId) {
+      this.loading = true;
+      this.error = null;
+      
+      try {
+        const response = await api.getContestById(contestId);
+        const contest = response.data;
+        this.currentContest = contest;
+        
+        // Fetch location data for this contest
+        if (contest && contest.location_id) {
+          await this.fetchLocationData(contest.location_id);
+        }
+        
+        return contest;
+      } catch (error) {
+        this.error = error.response?.data?.error || 'Failed to load contest.';
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
+
     setCurrentLocation(location) {
       this.currentLocation = location;
     },
 
     clearCurrentLocation() {
       this.currentLocation = null;
+      this.currentContest = null;
       this.currentLocationTeams = [];
       this.currentLocationContests = [];
     }

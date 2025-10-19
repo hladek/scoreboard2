@@ -89,6 +89,7 @@
 </template>
 
 <script>
+import { useLocationStore } from '../stores/location';
 import { useUserStore } from '../stores/user';
 import { computed, ref } from 'vue';
 import api from '../api';
@@ -100,30 +101,37 @@ export default {
     RoundEdit
   },
   setup() {
+    const locationStore = useLocationStore();
     const userStore = useUserStore();
+    
+    const location = computed(() => locationStore.currentLocation);
+    const contest = computed(() => locationStore.currentContest);
+    const contests = computed(() => locationStore.currentLocationContests);
+    const teams = computed(() => locationStore.currentLocationTeams);
+    const loading = computed(() => locationStore.loading);
+    const error = computed(() => locationStore.error);
     const isAuthenticated = computed(() => userStore.isAuthenticated);
     
-    const contest = ref(null);
     const rounds = ref([]);
-    const teams = ref([]);
-    const loading = ref(false);
     const roundsLoading = ref(false);
-    const error = ref('');
     const showEditModal = ref(false);
     const selectedRound = ref(null);
     const contestId = ref(null);
     
     return {
-      isAuthenticated,
+      location,
       contest,
-      rounds,
+      contests,
       teams,
       loading,
-      roundsLoading,
       error,
+      isAuthenticated,
+      rounds,
+      roundsLoading,
       showEditModal,
       selectedRound,
-      contestId
+      contestId,
+      locationStore
     };
   },
   computed: {
@@ -146,25 +154,14 @@ export default {
   methods: {
     async fetchData() {
       try {
-        this.loading = true;
-        this.error = '';
-        
-        // Fetch contest details
-        const contestResponse = await api.getContestById(this.contestId);
-        this.contest = contestResponse.data;
-        
-        // Fetch teams for the location
-        const teamsResponse = await api.getTeamsByLocationId(this.contest.location_id);
-        this.teams = teamsResponse.data;
+        // Use the location store method to fetch contest and all related data
+        await this.locationStore.fetchContestById(this.contestId);
         
         // Fetch rounds
         await this.fetchRounds();
         
       } catch (err) {
         console.error('Failed to load data:', err);
-        this.error = 'Failed to load contest data. Please try again.';
-      } finally {
-        this.loading = false;
       }
     },
     async fetchRounds() {
@@ -174,7 +171,6 @@ export default {
         this.rounds = response.data;
       } catch (err) {
         console.error('Failed to load rounds:', err);
-        this.error = 'Failed to load rounds. Please try again.';
       } finally {
         this.roundsLoading = false;
       }
